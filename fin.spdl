@@ -1,0 +1,68 @@
+usertype text;
+usertype KeyingMaterial;
+usertype freshkey;
+hashfunction KDF, H;
+const HNID,SUPI,Texp,SNID:text;
+macro CAue={UE,SUPI,Texp}sk(HN);
+protocol azhagu(UE,SEAF,HN)
+{
+role HN
+{
+fresh N1,N2: Nonce;
+var MAC1,MAC2,MAC3: text;
+fresh MAC,RES:Function;
+secret CH:Function;
+var Key: KeyingMaterial;
+send_1(HN,SEAF,{UE,k(UE,HN),HNID}pk(SEAF));
+recv_3(SEAF,HN,{N2,SNID}k(UE,HN),MAC2);
+match(Key,H(k(UE,HN),UE,SEAF,N1,N2,HNID));
+send_4(HN,SEAF,{N2,HNID}k(UE,HN),MAC2,MAC((N1,N2),N2,SNID),H(RES(SUPI,(N1,N2),SNID),N1));
+recv_7(SEAF,HN,CH(SUPI,(N1,N2),SNID),MAC3);
+match(CH(SUPI,(N1,N2),SNID),H(RES(SUPI,(N1,N2),SNID),N1));
+
+send_8(HN,SEAF,{SUPI,Key}k(UE,HN));
+
+}
+role UE
+{ fresh N1,N2: Nonce;
+var MAC1,MAC2,MAC3: text;
+var Key: KeyingMaterial;
+fresh MAC,RES:Function;
+secret CH:Function;
+match(MAC1,H(k(UE,HN),UE, N1,SEAF,CAue,HNID));
+send_2(UE,SEAF,{N1,CAue,SNID}k(UE,HN),MAC1);
+match(Key,H(k(UE,HN),UE,SEAF,N1,N2,HNID));
+recv_5(SEAF,UE,{N2,HNID}k(UE,HN),MAC2,MAC((N1,N2),N2,SNID),H(RES(SUPI,(N1,N2),SNID),N1));
+match(MAC3,MAC((N1,N2),N2,SNID));
+send_6(UE,SEAF,CH(SUPI,(N1,N2),SNID),MAC3);
+recv_9(SEAF,UE,{SUPI,Key}k(UE,HN));
+send_10(UE,SEAF,H(Key,UE,SEAF,CAue,N1,N2,HNID));
+claim(UE,Secret,Key);
+claim(UE,Alive);
+claim(UE,Weakagree);
+claim(UE,Niagree);
+claim(UE,Nisynch);
+}
+role SEAF
+{ fresh N1,N2: Nonce;
+var MAC1,MAC2,MAC3: text;
+var Key: KeyingMaterial;
+fresh MAC,RES:Function;
+secret CH:Function;
+recv_1(HN,SEAF,{UE,k(UE,HN),HNID}pk(SEAF));
+recv_2(UE,SEAF,{N1,CAue,SNID}k(UE,HN),MAC1);
+match(MAC2,H(k(UE,SEAF),UE, SEAF,N1,N2,HNID));
+send_3(SEAF,HN,{N2,SNID}k(UE,HN),MAC2);
+recv_4(HN,SEAF,{N2,HNID}k(UE,HN),MAC2,MAC((N1,N2),N2,SNID),H(RES(SUPI,(N1,N2),SNID),N1));
+send_5(SEAF,UE,{N2,HNID}k(UE,HN),MAC2,MAC((N1,N2),N2,SNID),H(RES(SUPI,(N1,N2),SNID),N1));
+recv_6(UE,SEAF,CH(SUPI,(N1,N2),SNID),MAC3);
+send_7(SEAF,HN,CH(SUPI,(N1,N2),SNID),MAC3);
+recv_8(HN,SEAF,{SUPI,Key}k(UE,HN));
+send_9(SEAF,UE,{SUPI,Key}k(UE,HN));
+recv_10(UE,SEAF,H(Key,UE,SEAF,CAue,N1,N2,HNID));
+claim(SEAF,Secret,Key);
+claim(SEAF,Alive);
+claim(SEAF,Weakagree);
+claim(SEAF,Niagree);
+claim(SEAF,Nisynch);
+}}
