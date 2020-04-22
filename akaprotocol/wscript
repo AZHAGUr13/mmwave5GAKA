@@ -1,0 +1,40 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+# def options(opt):
+#     pass
+
+# def configure(conf):
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
+
+def build(bld):
+    module = bld.create_ns3_module('akaprotocol', ['core'])
+    module.source = [
+        'model/akaprotocol.cc',
+        'model/home.cc',
+        'model/serving-aka.cc',
+        'model/user-aka.cc',
+        'model/aka.cc',
+        'helper/akaprotocol-helper.cc',
+        ]
+
+    module_test = bld.create_ns3_module_test_library('akaprotocol')
+    module_test.source = [
+        'test/akaprotocol-test-suite.cc',
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'akaprotocol'
+    headers.source = [
+        'model/akaprotocol.h',
+        'model/home.h',
+        'model/aka.h',
+        'model/serving-aka.h',
+        'model/user-aka.h',
+        'helper/akaprotocol-helper.h',
+        ]
+
+    if bld.env.ENABLE_EXAMPLES:
+        bld.recurse('examples')
+
+    # bld.ns3_python_bindings()
+

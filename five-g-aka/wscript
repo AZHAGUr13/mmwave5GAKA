@@ -1,0 +1,46 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+# def options(opt):
+#     pass
+
+# def configure(conf):
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
+
+def build(bld):
+    module = bld.create_ns3_module('five-g-aka', ['applications','core'])
+    module.source = [
+        'model/five-g-aka.cc',
+        'model/all-user.cc',
+        'model/custom-data-tag.cc',
+        'helper/five-g-aka-helper.cc',
+        'model/serving-network-aka.cc',
+        'model/user-equipment-aka.cc',
+        'model/home-network-aka.cc',
+        'model/myheader.cc',
+        'model/sha256.cc'
+        ]
+
+    module_test = bld.create_ns3_module_test_library('five-g-aka')
+    module_test.source = [
+        'test/five-g-aka-test-suite.cc',
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'five-g-aka'
+    headers.source = [
+        'model/five-g-aka.h',
+        'model/all-user.h',
+        'model/custom-data-tag.h',
+        'helper/five-g-aka-helper.h',
+        'model/serving-network-aka.h',
+        'model/home-network-aka.h',
+        'model/user-equipment-aka.h',
+        'model/myheader.h',
+        'model/sha256.h'
+        ]
+
+    if bld.env.ENABLE_EXAMPLES:
+        bld.recurse('examples')
+
+    # bld.ns3_python_bindings()
+

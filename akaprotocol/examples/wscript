@@ -1,0 +1,16 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    obj = bld.create_ns3_program('akaprotocol-example', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'akaprotocol-example.cc'
+    obj = bld.create_ns3_program('one-send', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'one-send.cc'
+    obj = bld.create_ns3_program('oldresFault', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'resFault.cc'
+    obj = bld.create_ns3_program('oldmacFault', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'macFault.cc'
+    obj = bld.create_ns3_program('oldmultipledevices', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'multipledevices.cc'
+    obj = bld.create_ns3_program('oldrandomAssign', ['akaprotocol','netanim','mmwave','applications','network','core','internet', 'config-store','stats','five-g-aka','flow-monitor'])
+    obj.source = 'randomAssign.cc'
+
